@@ -1,0 +1,80 @@
+{% extends 'layout.nunjucks' %}
+
+{% block content %}
+
+  <div class="row">
+
+    <div class="col-md-12">
+
+      <h1>Welcome Lieutenant Administrator</h1>
+
+      <hr>
+
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+
+          <h3 class="panel-title">Lieutenants Section</h3>
+        </div>
+
+        <div class="panel-body">
+
+          {% if count <= 8 %}
+            <button class="btn btn-primary" data-toggle="modal", data-target="#addLt">Add A Lieutenant</button>
+          {% endif %}
+
+          <div class="table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Lieutenant</th>
+                  <th>Username</th>
+                  <th>Total Lifters</th>
+                  <th>In Lifters</th>
+                  <th>Out Lifters</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in data %}
+
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.username }}</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>
+
+                    <ul class="nav">
+                      <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                        Actions <span class="caret">
+                        </a>
+
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a data-toggle="modal", data-target="#editLt{{lieutenant.dataValues.id}}"> Update Lieutenant</a>
+                          </li>
+                          <li>
+                            <a data-toggle="modal", data-target="#changepwdLt{{lieutenant.dataValues.id}}"> Change Lieutenant Password </a>
+                          </li>
+                          <li>
+                            <a data-toggle="modal", data-target="#changepwdLt{{lieutenant.dataValues.id}}"> View Lieutenant Lifters </a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+
+                  </td>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

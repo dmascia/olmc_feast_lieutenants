@@ -13,7 +13,31 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
     isAuthorized('ADMIN'),
     (req, res) => {
 
-    return res.render('admin');
+      db.Users.findAndCountAll({
+        where: { roles: "LIEUTENANT"}
+      })
+      .then( findAndCountResult => {
+
+        const count = findAndCountResult.count;
+        let data = [];
+
+        if (count > 0) {
+
+          data = findAndCountResult.rows.map( user => {
+
+            return {
+              name: `${user.dataValues.firstname} ${user.dataValues.lastname}`,
+              username: user.dataValues.username,
+              email: user.dataValues.email
+            };
+          });
+        }
+
+        return res.render('admin', {
+          count: count,
+          data: data
+        });
+      });
   });
 
 };

@@ -74,7 +74,15 @@ module.exports = function(sequelize, DataTypes) {
     credentials_expire_at: {
       type: DataTypes.DATE,
       allowNull: true
-    }
+    },
+    firstname: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   },
   {
     tableName: 'Users',
