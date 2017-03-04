@@ -23,7 +23,11 @@ module.exports = (app, passport, ensureLogin) => {
   router.get('/dashboard', ensureLogin.ensureLoggedIn('/'),
     (req, res) => {
 
-      return res.render('dashboard');
+      if (req.user.roles === "ADMIN") {
+
+        return res.redirect("/admin");
+      }
+
     }
   );
 

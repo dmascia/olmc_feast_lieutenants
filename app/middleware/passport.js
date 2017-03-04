@@ -51,7 +51,7 @@ passport.deserializeUser( (userID, done) => {
         return done(null, false);
       }
 
-      return done(null, userResult);
+      return done(null, userResult.dataValues);
     })
     .catch( error => {
 
