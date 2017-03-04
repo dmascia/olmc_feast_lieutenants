@@ -81,7 +81,7 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
   });
 
-  Users.verifyPasword = (user, enteredPassword) => {
+  Users.verifyPassword = (user, enteredPassword) => {
 
     const hashedPassword = crypto.createHash('md5')
       .update(`${user.salt}${enteredPassword}`)

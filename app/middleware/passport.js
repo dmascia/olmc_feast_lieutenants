@@ -2,7 +2,7 @@
 
 const passport = require('passport'),
       Strategy = require('passport-local').Strategy,
-      db = require('./../app/models');
+      db = require('./../models');
 
 passport.use(new Strategy(
   (username, password, done) => {
@@ -12,12 +12,12 @@ passport.use(new Strategy(
     })
     .then( userResult => {
 
-      if (!userResult) {
+      if (userResult === null) {
 
-        return done(null, false);
+        throw new Error("no user found");
       }
 
-      return db.Users.verifyPasword(userResult.dataValues, password);
+      return db.Users.verifyPassword(userResult.dataValues, password);
     })
     .then( passwordResult => {
 
@@ -28,7 +28,10 @@ passport.use(new Strategy(
       return done(null, false);
     })
     .catch( error => {
-      return done(error, null);
+
+      console.log("PASSPORT ERROR", error);
+
+      return done(null, false);
     });
   })
 );
