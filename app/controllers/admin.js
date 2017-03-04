@@ -26,9 +26,16 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           data = findAndCountResult.rows.map( user => {
 
             return {
-              name: `${user.dataValues.firstname} ${user.dataValues.lastname}`,
+              id: user.dataValues.id,
               username: user.dataValues.username,
-              email: user.dataValues.email
+              firstname: user.dataValues.firstname,
+              lastname: user.dataValues.lastname,
+              email: user.dataValues.email,
+              totals: {
+                lifters: 0,
+                out: 0,
+                in: 0
+              }
             };
           });
         }

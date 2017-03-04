@@ -87,6 +87,12 @@ module.exports = function(sequelize, DataTypes) {
   {
     tableName: 'Users',
     timestamps: false,
+    classMethods: {
+      associate: models => {
+
+        Users.hasMany(models.Lifters);
+      }
+    }
   });
 
   Users.verifyPassword = (user, enteredPassword) => {
