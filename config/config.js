@@ -12,7 +12,7 @@ const config = {
       name: 'olmc_feast_lieutenants'
     },
     port: process.env.PORT || 3000,
-    db: 'mysql://localhost/test-development'
+    db: 'mysql://root:root@localhost:8889/olmcfeast'
   }
 };
 

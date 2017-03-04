@@ -14,9 +14,18 @@
   {% endif %}
 
 </head>
-<body class="container">
+<body>
 
-  {% block content %}{% endblock %}
+  <div class="container">
+    {% block content %}{% endblock %}
+
+    <div class="panel-footer">
+  		<p style="text-align: center;">
+  			Copyright &copy OLMC Feast 2017 <br/>
+  			Designed and Hosted by <a href="http://www.davemascia.com" target="_blank">Dave Mascia </a>
+  		</p>
+  	</div>
+  </div>
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>

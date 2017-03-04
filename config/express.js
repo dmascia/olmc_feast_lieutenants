@@ -8,14 +8,20 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       compress = require('compression'),
       methodOverride = require('method-override'),
-      nunjucks = require('nunjucks');
+      nunjucks = require('nunjucks'),
+      session = require('express-session'),
+      passport = require('./passport'),
+      csrf = require('csurf'),
+      flash = require('express-flash'),
+      sessionStore = new session.MemoryStore(),
+      ensureLogin = require('connect-ensure-login');
 
 module.exports = (app, config) => {
 
   const env = process.env.NODE_ENV || 'development';
 
   app.locals.ENV = env;
-  app.locals.ENV_DEVELOPMENT = env == 'development';
+  app.locals.ENV_DEVELOPMENT = env === 'development';
 
   app.set('views', `${config.root}/app/views`);
   app.set('view engine', 'nunjucks');
@@ -32,12 +38,29 @@ module.exports = (app, config) => {
   app.use(compress());
   app.use(express.static(`${config.root}/public`));
   app.use(methodOverride());
+  app.use(session({
+    secret: 'zriRHn1GY1pAREBIZHFS',
+    cookie: { maxAge: 60000 },
+    store: sessionStore,
+    saveUninitialized: true,
+    resave: 'true'
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(csrf({ cookie: true }));
+  app.use(flash());
+
+  app.use(function (req, res, next) {
+
+    res.locals.messages = req.flash();
+    next();
+  });
 
   const controllers = glob.sync(`${config.root}//app/controllers/*.js`);
 
   controllers.forEach( controller => {
 
-    require(controller)(app);
+    require(controller)(app, passport, ensureLogin);
   });
 
   app.use( (req, res, next) => {
