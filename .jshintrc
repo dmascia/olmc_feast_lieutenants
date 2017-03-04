@@ -1,0 +1,20 @@
+{
+  "esversion": 6,
+  "varstmt": true,
+  "node": true,
+  "devel": false,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": true,
+  "noempty": true,
+  "newcap": true,
+  "unused": true,
+  "strict": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "boss": true,
+  "eqnull": true,
+  "browser": false
+}
