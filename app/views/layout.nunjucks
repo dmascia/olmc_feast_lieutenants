@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+
+  <title>OLMC Lieutenants Portal</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  {% if ENV_DEVELOPMENT %}
+    <script src="http://localhost:35729/livereload.js"></script>
+  {% endif %}
+
+</head>
+<body class="container">
+
+  {% block content %}{% endblock %}
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
