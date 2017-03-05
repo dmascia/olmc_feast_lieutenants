@@ -9,8 +9,11 @@ module.exports = (app, passport, ensureLogin) => {
 
   router.get('/', (req, res) => {
 
+    const flashMessage = req.flash();
+
     return res.render('index', {
       csrfToken: req.csrfToken(),
+      error: (flashMessage.error) ? flashMessage.error[0] : ""
     });
   });
 

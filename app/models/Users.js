@@ -47,33 +47,9 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(1),
       allowNull: false
     },
-    expired: {
-      type: DataTypes.INTEGER(1),
-      allowNull: false
-    },
-    expires_at: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    confirmation_token: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    password_requested_at: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
     roles: {
       type: DataTypes.TEXT,
       allowNull: false
-    },
-    credentials_expired: {
-      type: DataTypes.INTEGER(1),
-      allowNull: false
-    },
-    credentials_expire_at: {
-      type: DataTypes.DATE,
-      allowNull: true
     },
     firstname: {
       type: DataTypes.STRING,

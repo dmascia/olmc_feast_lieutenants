@@ -21,6 +21,13 @@
 
         <div class="panel-body">
 
+          {% if error %}
+            <div class="alert alert-danger">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error!</strong> {{ error }}
+            </div>
+          {% endif %}
+
           <form action="/login" method="post" class="form-signin">
             <fieldset>
               <input type="hidden" name="_csrf" value="{{ csrfToken }}">

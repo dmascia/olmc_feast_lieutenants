@@ -18,6 +18,19 @@
 
         <div class="panel-body">
 
+          {% if success %}
+            <div class="alert alert-success">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Success!</strong> {{ success }}
+            </div>
+          {% endif %}
+          {% if error %}
+            <div class="alert alert-danger">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error!</strong> {{ error }}
+            </div>
+          {% endif %}
+
           <div class="table">
             <table class="table">
               <thead>
@@ -25,41 +38,38 @@
                   <th>Lieutenant</th>
                   <th>Username</th>
                   <th>Total Lifters</th>
-                  <th>Lifters In</th>
-                  <th>Lifters Out</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {% for item in data %}
+                  <tr>
+                    <td>{{ item.firstname }} {{ item.lastname }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.totals.lifters }}</td>
+                    <td>
 
-                  <td>{{ item.firstname }} {{ item.lastname }}</td>
-                  <td>{{ item.username }}</td>
-                  <td>{{ item.totals.lifters }}</td>
-                  <td>{{ item.totals.in }}</td>
-                  <td>{{ item.totals.out }}</td>
-                  <td>
+                      <ul class="nav">
+                        <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                          Actions <span class="caret">
+                          </a>
 
-                    <ul class="nav">
-                      <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
-                        Actions <span class="caret">
-                        </a>
-
-                        <ul class="dropdown-menu">
-                          <li>
-                            <a data-toggle="modal" data-target="#editLieutenant{{ item.id }}"> Update Lieutenant</a>
-                          </li>
-                          <li>
-                            <a data-toggle="modal" data-target="#changeLieutenant{{ item.id }}"> Change Lieutenant Password </a>
-                          </li>
-                          <li>
-                            <a href="/lieutenant/{{ item.id }}/lifters"> View Lieutenant Lifters </a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </td>
+                          <ul class="dropdown-menu">
+                            <li>
+                              <a data-toggle="modal" data-target="#editLieutenant{{ item.id }}"> Update Lieutenant</a>
+                            </li>
+                            <li>
+                              <a data-toggle="modal" data-target="#changeLieutenant{{ item.id }}"> Change Lieutenant Password </a>
+                            </li>
+                            <li>
+                              <a href="/lieutenant/{{ item.id }}/lifters"> View Lieutenant Lifters </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
 
                   <div class="modal fade" id="editLieutenant{{ item.id }}" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
@@ -71,6 +81,7 @@
                         <div class="modal-body">
                           <form class="form-signin" action="/lieutenant/{{ item.id }}/edit" method="put">
                             <fieldset>
+                              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                               <div class="form-group">
                                 <label for="firstname">First Name</label>
                                 <input class="form-control" type="text" name="firstname" value="{{ item.firstname }}" required="required"/>
@@ -106,6 +117,7 @@
                         <div class="modal-body">
                           <form class="form-signin" action="/lieutenant/{{ item.id }}/changepassword" method="put">
                             <fieldset>
+                              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                               <div class="form-group">
                                 <label for="password">Password</label>
                                 <input class="form-control" type="passowrd" name="password" placeholder="Password"/>
@@ -126,8 +138,7 @@
               </tbody>
             </table>
 
-            {% if count <= 8 %}
-
+            {% if count < 8 %}
               <button class="btn btn-primary" data-toggle="modal", data-target="#addLieutenant">Add A Lieutenant</button>
             {% endif %}
 
@@ -149,6 +160,7 @@
         <div class="modal-body">
           <form class="form-signin" action="/lieutenant" method="post">
             <fieldset>
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
               <div class="form-group">
                 <label for="firstname">First Name</label>
                 <input class="form-control" type="text" name="firstname" placeholder="First Name" required="required"/>

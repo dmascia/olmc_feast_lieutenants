@@ -14,7 +14,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
     (req, res) => {
 
       db.Users.findAndCountAll({
-        where: { roles: "LIEUTENANT"}
+        where: { roles: "LIEUTENANT"},
+        limit: 8
       })
       .then( findAndCountResult => {
 
@@ -32,17 +33,20 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
               lastname: user.dataValues.lastname,
               email: user.dataValues.email,
               totals: {
-                lifters: 0,
-                out: 0,
-                in: 0
+                lifters: 0
               }
             };
           });
         }
 
+        const flashMessage = req.flash();
+
         return res.render('admin', {
           count: count,
-          data: data
+          data: data,
+          csrfToken: req.csrfToken(),
+          success: (flashMessage.success) ? flashMessage.success[0] : "",
+          error: (flashMessage.error) ? flashMessage.error[0] : "",
         });
       });
   });

@@ -13,8 +13,7 @@ const express = require('express'),
       passport = require('./../app/middleware/passport'),
       isAuthorized = require('./../app/middleware/isAuthorized'),
       csrf = require('csurf'),
-      flash = require('express-flash'),
-      sessionStore = new session.MemoryStore(),
+      flash = require('connect-flash'),
       ensureLogin = require('connect-ensure-login');
 
 module.exports = (app, config) => {
@@ -42,20 +41,14 @@ module.exports = (app, config) => {
   app.use(session({
     secret: 'zriRHn1GY1pAREBIZHFS',
     cookie: { maxAge: 60000 },
-    store: sessionStore,
+    store:  new session.MemoryStore,
     saveUninitialized: true,
-    resave: 'true'
+    resave: 'true',
   }));
+  app.use(flash());
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(csrf({ cookie: true }));
-  app.use(flash());
-
-  // app.use(function (req, res, next) {
-  //
-  //   res.locals.messages = req.flash();
-  //   next();
-  // });
 
   const controllers = glob.sync(`${config.root}//app/controllers/*.js`);
 
