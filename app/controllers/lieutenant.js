@@ -16,6 +16,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
       if (req.body.password !== req.body.verifyPassword) {
 
+        req.flash("error", "Password do not match!");
         return res.status(400).send("passwords do not match");
       }
 
@@ -43,7 +44,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
           if (!createUserResult) {
 
-            req.flash("error", "Could not save Lieutenant");
+            req.flash("error", "Could not save lieutenant");
             return res.redirect('/admin/');
           }
 
@@ -53,7 +54,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
         .catch( error => {
 
           console.error("LIEUTENANT CREATION ERROR", error);
-          req.flash("error", "Could not save Lieutenant");
+          req.flash("error", "Could not save lieutenant");
           return res.redirect('/admin/');
         });
   });
@@ -83,7 +84,49 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
       .catch( error => {
 
         console.error("LIEUTENANT UPDATED ERROR", error);
-        req.flash("error", "Could not updated Lieutenant");
+        req.flash("error", "Could not updated lieutenant");
+        return res.redirect('/admin/');
+      });
+  });
+
+  router.post('/:lieutenantId/changePassword',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('ADMIN'),
+    (req, res) => {
+
+      const lieutenantId = req.params.lieutenantId;
+
+      if (req.body.password !== req.body.verifyPassword) {
+
+        req.flash("error", "Password do not match!");
+        return res.status(400).send("passwords do not match");
+      }
+
+      const salt = crypto.randomBytes(20).toString('hex');
+      const hashedPassword = crypto.createHash('md5')
+        .update(`${salt}${req.body.password}`)
+        .digest('base64');
+
+
+      db.Users.update(
+        { password: hashedPassword, salt: salt},
+        { where: { id: lieutenantId } }
+      )
+      .then( updateResult => {
+
+        if (!updateResult) {
+
+          req.flash("error", "Could not change lieutenants password");
+          return res.redirect('/admin/');
+        }
+
+        req.flash("success", `Lieutenant password changed!`);
+        return res.redirect('/admin/');
+      })
+      .catch( error => {
+
+        console.error("LIEUTENANT CHANGE PASSWORD ERROR", error);
+        req.flash("error", "Could not change lieutenant password");
         return res.redirect('/admin/');
       });
   });

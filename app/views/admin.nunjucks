@@ -115,12 +115,12 @@
                           <h4 class="modal-title">Change Lieutenant Password</h4>
                         </div>
                         <div class="modal-body">
-                          <form class="form-signin" action="/lieutenant/{{ item.id }}/changepassword" method="post">
+                          <form class="form-signin" action="/lieutenant/{{ item.id }}/changePassword" method="post">
                             <fieldset>
                               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                               <div class="form-group">
                                 <label for="password">Password</label>
-                                <input class="form-control" type="passowrd" name="password" placeholder="Password"/>
+                                <input class="form-control" type="password" name="password" placeholder="Password"/>
                               </div>
                               <div class="form-group">
                                 <label for="verifypassword">Verify Password</label>
