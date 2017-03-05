@@ -24,7 +24,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
         .update(`${salt}${req.body.password}`)
         .digest('base64');
 
-      const user = {
+      const lieutenant = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         username: req.body.username,
@@ -38,7 +38,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
         roles: "LIEUTENANT"
       };
 
-      db.Users.create(user)
+      db.Users.create(lieutenant)
         .then( createUserResult => {
 
           if (!createUserResult) {
@@ -47,7 +47,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
             return res.redirect('/admin/');
           }
 
-          req.flash("success", `Lieutenant ${user.firstname} ${user.lastname} has been created!`);
+          req.flash("success", `Lieutenant ${lieutenant.firstname} ${lieutenant.lastname} has been created!`);
           return res.redirect('/admin/');
         })
         .catch( error => {
@@ -56,6 +56,36 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           req.flash("error", "Could not save Lieutenant");
           return res.redirect('/admin/');
         });
+  });
+
+  router.post('/:lieutenantId/update',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('ADMIN'),
+    (req, res) => {
+
+      const lieutenant = req.body;
+      const lieutenantId = req.params.lieutenantId;
+
+      db.Users.update( lieutenant,
+        { where: { id: lieutenantId } }
+      )
+      .then( updateResult => {
+
+        if (!updateResult) {
+
+          req.flash("error", "Could not update Lieutenant");
+          return res.redirect('/admin/');
+        }
+
+        req.flash("success", `Lieutenant ${lieutenant.firstname} ${lieutenant.lastname} has been updated!`);
+        return res.redirect('/admin/');
+      })
+      .catch( error => {
+
+        console.error("LIEUTENANT UPDATED ERROR", error);
+        req.flash("error", "Could not updated Lieutenant");
+        return res.redirect('/admin/');
+      });
   });
 
 };

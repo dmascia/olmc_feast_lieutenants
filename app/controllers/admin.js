@@ -14,7 +14,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
     (req, res) => {
 
       db.Users.findAndCountAll({
-        where: { roles: "LIEUTENANT"},
+        where: { roles: "LIEUTENANT" },
+        attributes: ['id', 'username', 'email', 'firstname', 'lastname'],
         limit: 8
       })
       .then( findAndCountResult => {

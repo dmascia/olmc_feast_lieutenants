@@ -8,7 +8,7 @@ passport.use(new Strategy(
   (username, password, done) => {
 
     db.Users.findOne({
-      where: { username: username }
+      where: { username: username },
     })
     .then( userResult => {
 
@@ -43,9 +43,11 @@ passport.serializeUser( (user, done) => {
 
 passport.deserializeUser( (userID, done) => {
 
-  db.Users.findById(userID)
+  db.Users.findById(userID, {
+      attributes: ['id', 'roles']
+    })
     .then( userResult => {
-
+      
       if (!userResult) {
 
         return done(null, false);

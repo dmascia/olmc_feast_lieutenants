@@ -57,7 +57,7 @@
 
                           <ul class="dropdown-menu">
                             <li>
-                              <a data-toggle="modal" data-target="#editLieutenant{{ item.id }}"> Update Lieutenant</a>
+                              <a data-toggle="modal" data-target="#updateLieutenant{{ item.id }}"> Update Lieutenant</a>
                             </li>
                             <li>
                               <a data-toggle="modal" data-target="#changeLieutenant{{ item.id }}"> Change Lieutenant Password </a>
@@ -71,15 +71,15 @@
                     </td>
                   </tr>
 
-                  <div class="modal fade" id="editLieutenant{{ item.id }}" tabindex="-1" role="dialog">
+                  <div class="modal fade" id="updateLieutenant{{ item.id }}" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
-                          <h4 class="modal-title">Edit Lieutenant</h4>
+                          <h4 class="modal-title">Update Lieutenant</h4>
                         </div>
                         <div class="modal-body">
-                          <form class="form-signin" action="/lieutenant/{{ item.id }}/edit" method="put">
+                          <form class="form-signin" action="/lieutenant/{{ item.id }}/update" method="post">
                             <fieldset>
                               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                               <div class="form-group">
@@ -99,7 +99,7 @@
                                 <input class="form-control" type="text", name="email" value="{{ item.email }}" required="required"/>
                               </div>
                               <hr/>
-                              <button class="btn btn-block btn-primary" type="submit">Edit Lieutenant</button>
+                              <button class="btn btn-block btn-primary" type="submit">Update Lieutenant</button>
                             </fieldset>
                           </form>
                         </div>
@@ -115,7 +115,7 @@
                           <h4 class="modal-title">Change Lieutenant Password</h4>
                         </div>
                         <div class="modal-body">
-                          <form class="form-signin" action="/lieutenant/{{ item.id }}/changepassword" method="put">
+                          <form class="form-signin" action="/lieutenant/{{ item.id }}/changepassword" method="post">
                             <fieldset>
                               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                               <div class="form-group">
