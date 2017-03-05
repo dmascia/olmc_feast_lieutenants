@@ -1,0 +1,195 @@
+{% extends 'layout.nunjucks' %}
+
+{% block content %}
+
+  <div class="row">
+
+    <div class="col-md-12">
+
+      <h1>Welcome {{ lieutenant }}, It's A Number TWO!!!</h1>
+
+      <hr>
+
+      <button class="btn btn-primary" data-toggle="modal", data-target="#addLifter">Add A Lifter</button>
+      <a href="/logout" class="btn btn-info">Logout</a>
+
+      <hr>
+
+      <h3> Total Lifters: <span style="color: red;">{{ lifterCount }}</span> | Lifters In: <span style="color: red;">{{ lifterCount }}</span> | Lifters Out: <span style="color: red;">{{ lifterCount }}</span> </h3>
+
+      <hr>
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+
+          <h3 class="panel-title">My Crew</h3>
+        </div>
+
+        <div class="panel-body">
+
+          {% if success %}
+            <div class="alert alert-success">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Success!</strong> {{ success }}
+            </div>
+          {% endif %}
+          {% if error %}
+            <div class="alert alert-danger">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error!</strong> {{ error }}
+            </div>
+          {% endif %}
+
+          <div class="table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Street</th>
+                  <th>City</th>
+                  <th>State</th>
+                  <th>Zip</th>
+                  <th>TShirt Size</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in lifters %}
+                  <tr>
+                    <td>{{ item.firstname }} {{ item.lastname }}</td>
+                    <td>{{ item.phone }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>{{ item.city }}</td>
+                    <td>{{ item.state }}</td>
+                    <td>{{ item.zip }} </td>
+                    <td>{{ item.tshirt_size }}</td>
+                    <td>
+
+                      <ul class="nav">
+                        <li class="dropdown">
+                          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                          Actions <span class="caret">
+                          </a>
+
+                          <ul class="dropdown-menu">
+                            <li>
+                              <a data-toggle="modal" data-target="#updateLifter{{ item.id }}"> Update Lifter</a>
+                            </li>
+                            <li>
+                              <a data-toggle="modal" data-target="#deleteLifter{{ item.id }}"> Delete Lifter </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </td>
+                  </tr>
+
+                  <div class="modal fade" id="updateLieutenant{{ item.id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+                          <h4 class="modal-title">Update Lifter</h4>
+                        </div>
+                        <div class="modal-body">
+                          <form class="form-signin" action="/lifter/{{ item.id }}/update" method="post">
+                            <fieldset>
+                              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                              <hr/>
+                              <button class="btn btn-block btn-primary" type="submit">Update Lifter</button>
+                            </fieldset>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="deleteLifter{{ item.id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+                          <h4 class="modal-title">Delete Lifter</h4>
+                        </div>
+                        <div class="modal-body">
+                          <form class="form-signin" action="/delete/{{ item.id }}/delete" method="post">
+                            <fieldset>
+
+                              <hr/>
+                              <button class="btn btn-block btn-primary" type="submit">Delete</button>
+                            </fieldset>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="addLifter" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+          <h4 class="modal-title">Add A New Lifter</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-signin" action="/lifter" method="post">
+            <fieldset>
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+              <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input class="form-control" type="text" name="firstname" placeholder="First Name" required="required"/>
+              </div>
+              <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input class="form-control" type="text" name="lastname" placeholder="Last Name" required="required"/>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input class="form-control" type="text", name="email" placeholder="Email"/>
+              </div>
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input class="form-control" type="text" name="address" placeholder="Address"/>
+              </div>
+              <div class="form-group">
+                <label for="city">City</label>
+                <input class="form-control" type="text" name="city" placeholder="City"/>
+              </div>
+              <div class="form-group">
+                <label for="state">State</label>
+                <input class="form-control" type="text" name="state" placeholder="State"/>
+              </div>
+              <div class="form-group">
+                <label for="zip">zip</label>
+                <input class="form-control" type="text" name="zip" placeholder="Zip"/>
+              </div>
+              <div class="form-group">
+                <label for="tshirt">Tshirt Size</label>
+                <input class="form-control" type="text" name="tshirt_size" placeholder="Tshirt Size"/>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input class="form-control" type="text" name="phone" placeholder="Phone" required="required"/>
+              </div>
+              <hr/>
+              <button class="btn btn-block btn-primary" type="submit">Add Lifter</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

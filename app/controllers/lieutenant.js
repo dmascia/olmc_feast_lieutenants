@@ -9,6 +9,48 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
   app.use('/lieutenant', router);
 
+  router.get('/',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('LIEUTENANT'),
+    (req, res) => {
+
+      const flashMessage = req.flash();
+
+      db.Lifters.findAndCountAll({
+        where: { UserId: req.user.id }
+      })
+      .then( liftersResult => {
+
+        if (liftersResult.count === 0) {
+
+          throw new Error("no lifters found!");
+        }
+
+        return res.render('lieutenant', {
+          lieutenant: `${req.user.firstname} ${req.user.lastname}`,
+          lifterCount: liftersResult.count,
+          lifters: liftersResult.rows,
+          csrfToken: req.csrfToken(),
+          success: (flashMessage.success) ? flashMessage.success[0] : "",
+          error: (flashMessage.error) ? flashMessage.error[0] : "",
+        });
+      })
+      .catch( error => {
+
+        console.error("FIND LIFTERS ERROR", error);
+
+        return res.render('lieutenant', {
+          lieutenant: `${req.user.firstname} ${req.user.lastname}`,
+          lifterCount: 0,
+          csrfToken: req.csrfToken(),
+          success: (flashMessage.success) ? flashMessage.success[0] : "",
+          error: "no lifters found!",
+        });
+      });
+
+
+  });
+
   router.post('/',
     ensureLogin.ensureLoggedIn('/'),
     isAuthorized('ADMIN'),

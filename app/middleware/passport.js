@@ -49,7 +49,7 @@ passport.serializeUser( (user, done) => {
 passport.deserializeUser( (userID, done) => {
 
   db.Users.findById(userID, {
-      attributes: ['id', 'roles']
+      attributes: ['id', 'roles', 'firstname', 'lastname']
     })
     .then( userResult => {
 

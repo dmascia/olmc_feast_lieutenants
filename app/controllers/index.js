@@ -29,8 +29,10 @@ module.exports = (app, passport, ensureLogin) => {
       if (req.user.roles === "ADMIN") {
 
         return res.redirect("/admin");
-      }
+      } else {
 
+        return res.redirect("/lieutenant");
+      }
     }
   );
 
