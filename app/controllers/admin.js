@@ -13,6 +13,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
     isAuthorized('ADMIN'),
     (req, res) => {
 
+      const flashMessage = req.flash();
+
       db.Users.findAndCountAll({
         where: { roles: "LIEUTENANT" },
         attributes: ['id', 'username', 'email', 'firstname', 'lastname'],
@@ -40,14 +42,23 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           });
         }
 
-        const flashMessage = req.flash();
-
         return res.render('admin', {
           count: count,
           data: data,
           csrfToken: req.csrfToken(),
           success: (flashMessage.success) ? flashMessage.success[0] : "",
           error: (flashMessage.error) ? flashMessage.error[0] : "",
+        });
+      })
+      .catch( error => {
+
+        console.error("FIND LIEUTENANTS ERROR", error);
+
+        return res.render('admin', {
+          count: 0,
+          csrfToken: req.csrfToken(),
+          success: (flashMessage.success) ? flashMessage.success[0] : "",
+          error: "no lieutenants found!",
         });
       });
   });
