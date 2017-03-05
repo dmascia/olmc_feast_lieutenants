@@ -20,7 +20,7 @@ module.exports = (app, passport, ensureLogin) => {
   router.post('/login', passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/',
-    failureFlash: 'Invalid credentials'
+    failureFlash: 'Invalid credentials or Your account may be locked out'
   }));
 
   router.get('/dashboard', ensureLogin.ensureLoggedIn('/'),

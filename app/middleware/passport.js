@@ -17,6 +17,11 @@ passport.use(new Strategy(
         throw new Error("no user found");
       }
 
+      if (userResult.enabled === 0) {
+
+        throw new Error("account is not allowed to login");
+      }
+
       return db.Users.verifyPassword(userResult.dataValues, password);
     })
     .then( passwordResult => {
@@ -47,7 +52,7 @@ passport.deserializeUser( (userID, done) => {
       attributes: ['id', 'roles']
     })
     .then( userResult => {
-      
+
       if (!userResult) {
 
         return done(null, false);
