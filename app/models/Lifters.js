@@ -45,16 +45,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+    age: {
+      type: DataTypes.INTEGER(2),
+      allowNull: false
+    }
   },
   {
     tableName: 'Lifters',
     timestamps: false,
-    // classMethods: {
-    //   associate: models => {
-    //
-    //     Lifters.BelongsToMany(models.Users);
-    //   }
-    // }
   });
 
 

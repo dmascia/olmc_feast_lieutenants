@@ -36,4 +36,29 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
         });
   });
 
+  router.post('/:lifter/delete',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('LIEUTENANT'),
+    (req, res) => {
+
+      db.Lifters.destroy({ where: { id: req.params.lifter } })
+        .then( deleteResult => {
+
+          if (!deleteResult) {
+
+            req.flash("error", "Could not delete lifter");
+            return res.redirect('/lieutenant/');
+          }
+
+          req.flash("success", `Lifter has been created!`);
+          return res.redirect('/lieutenant/');
+        })
+        .catch( error => {
+
+          console.error("LIFTER DELETE ERROR", error);
+          req.flash("error", "Could not delete lifter");
+          return res.redirect('/lieutenant/');
+        });
+  });
+
 };

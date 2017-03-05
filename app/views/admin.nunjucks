@@ -96,7 +96,7 @@
                               </div>
                               <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input class="form-control" type="text", name="email" value="{{ item.email }}" required="required"/>
+                                <input class="form-control" type="email", name="email" value="{{ item.email }}" required="required"/>
                               </div>
                               <hr/>
                               <button class="btn btn-block btn-primary" type="submit">Update Lieutenant</button>
@@ -175,7 +175,7 @@
               </div>
               <div class="form-group">
                 <label for="email">Email Address</label>
-                <input class="form-control" type="text", name="email" placeholder="Email" required="required"/>
+                <input class="form-control" type="email", name="email" placeholder="Email" required="required"/>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>

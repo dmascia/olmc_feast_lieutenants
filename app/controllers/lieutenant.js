@@ -47,8 +47,6 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           error: "no lifters found!",
         });
       });
-
-
   });
 
   router.post('/',
