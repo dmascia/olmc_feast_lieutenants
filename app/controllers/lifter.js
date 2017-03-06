@@ -61,4 +61,34 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
         });
   });
 
+  router.post('/:lifter/update',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('LIEUTENANT'),
+    (req, res) => {
+
+      const lifter = req.body;
+      const lifterId = req.params.lifter;
+
+      db.Lifters.update( lifter,
+        { where: { id: lifterId } }
+      )
+      .then( updateResult => {
+
+        if (!updateResult) {
+
+          req.flash("error", "Could not update lifter");
+          return res.redirect('/lieutenant/');
+        }
+
+        req.flash("success", `Lifter ${lifter.firstname} ${lifter.lastname} has been updated!`);
+        return res.redirect('/lieutenant/');
+      })
+      .catch( error => {
+
+        console.error("LIFTER UPDATED ERROR", error);
+        req.flash("error", "Could not updated lifter");
+        return res.redirect('/lieutenant/');
+      });
+  });
+
 };

@@ -89,7 +89,7 @@
                     </td>
                   </tr>
 
-                  <div class="modal fade" id="updateLieutenant{{ item.id }}" tabindex="-1" role="dialog">
+                  <div class="modal fade" id="updateLifter{{ item.id }}" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -100,6 +100,62 @@
                           <form class="form-signin" action="/lifter/{{ item.id }}/update" method="post">
                             <fieldset>
                               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                              <div class="form-group">
+                                <label for="firstname">First Name</label>
+                                <input class="form-control" type="text" name="firstname" value="{{ item.firstname }}" required="required"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="lastname">Last Name</label>
+                                <input class="form-control" type="text" name="lastname" value="{{ item.lastname }}" required="required"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="age">Age</label>
+                                <select class="form-control" name="age">
+                                  <option value="{{ item.age }}"selected="selected">{{ item.age }}</option>
+                                  {% for i in range(14, 85) %}
+                                     <option value="{{ i }}">{{ i }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input class="form-control" type="email", name="email" value="{{ item.email }}"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="address">Address</label>
+                                <input class="form-control" type="text" name="address" value="{{ item.address }}"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="city">City</label>
+                                <input class="form-control" type="text" name="city" value="{{ item.city }}"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="state">State</label>
+                                <input class="form-control" type="text" name="state" value="{{ item.state }}"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="zip">zip</label>
+                                <input class="form-control" type="text" name="zip" value="{{ item.zip }}"/>
+                              </div>
+                              <div class="form-group">
+                                <label for="tshirt">Tshirt Size</label>
+                                <select class="form-control" name="tshirt_size">
+                                  <option value="{{ item.tshirt_size }}"selected="selected">{{ item.tshirt_size }}</option>
+                                  <option value="XS">XS</option>
+                                  <option value="S">S</option>
+                                  <option value="M">M</option>
+                                  <option value="L">L</option>
+                                  <option value="XL">XL</option>
+                                  <option value="2XL">2XL</option>
+                                  <option value="3XL">3XL</option>
+                                  <option value="4XL">4XL</option>
+                                  <option value="5XL">5XL</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input class="form-control" type="text" name="phone" value="{{ item.phone }}" required="required"/>
+                              </div>
 
                               <hr/>
 
@@ -166,9 +222,9 @@
               </div>
               <div class="form-group">
                 <label for="age">Age</label>
-                <select class="form-control" id="age">
+                <select class="form-control" name="age">
                   {% for i in range(14, 85) %}
-                     <option>{{ i }}</option>
+                     <option value="{{ i }}">{{ i }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -194,23 +250,25 @@
               </div>
               <div class="form-group">
                 <label for="tshirt">Tshirt Size</label>
-                <select class="form-control" id="tshirt_size">
-                   <option>XS</option>
-                   <option>S</option>
-                   <option>M</option>
-                   <option>L</option>
-                   <option>XL</option>
-                   <option>2XL</option>
-                   <option>3XL</option>
-                   <option>4XL</option>
-                   <option>5XL</option>
+                <select class="form-control" name="tshirt_size">
+                   <option value="XS">XS</option>
+                   <option value="S">S</option>
+                   <option value="M">M</option>
+                   <option value="L">L</option>
+                   <option value="XL">XL</option>
+                   <option value="2XL">2XL</option>
+                   <option value="3XL">3XL</option>
+                   <option value="4XL">4XL</option>
+                   <option value="5XL">5XL</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="phone">Phone</label>
                 <input class="form-control" type="text" name="phone" placeholder="Phone" required="required"/>
               </div>
+
               <hr/>
+
               <button class="btn btn-block btn-primary" type="submit">Add Lifter</button>
             </fieldset>
           </form>
