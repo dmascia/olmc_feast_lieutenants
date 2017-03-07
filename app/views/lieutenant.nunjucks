@@ -40,161 +40,159 @@
             </div>
           {% endif %}
 
-          <div class="table">
-            <table class="table">
-              <thead>
+          <table class="table table-condensed table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+                <th>TShirt Size</th>
+                <th>Age</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in lifters %}
                 <tr>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Street</th>
-                  <th>City</th>
-                  <th>State</th>
-                  <th>Zip</th>
-                  <th>TShirt Size</th>
-                  <th>Age</th>
-                  <th>Actions</th>
+                  <td>{{ item.firstname }} {{ item.lastname }}</td>
+                  <td>{{ item.phone }}</td>
+                  <td>{{ item.email }}</td>
+                  <td>{{ item.address }}</td>
+                  <td>{{ item.city }}</td>
+                  <td>{{ item.state }}</td>
+                  <td>{{ item.zip }} </td>
+                  <td>{{ item.tshirt_size }}</td>
+                  <td> {{ item.age }} </h4>
+                  <td>
+
+                    <ul class="nav">
+                      <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                        Actions
+                        </a>
+
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a data-toggle="modal" data-target="#updateLifter{{ item.id }}"> Update Lifter</a>
+                          </li>
+                          <li>
+                            <a data-toggle="modal" data-target="#deleteLifter{{ item.id }}"> Delete Lifter </a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for item in lifters %}
-                  <tr>
-                    <td>{{ item.firstname }} {{ item.lastname }}</td>
-                    <td>{{ item.phone }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.address }}</td>
-                    <td>{{ item.city }}</td>
-                    <td>{{ item.state }}</td>
-                    <td>{{ item.zip }} </td>
-                    <td>{{ item.tshirt_size }}</td>
-                    <td> {{ item.age }} </h4>
-                    <td>
 
-                      <ul class="nav">
-                        <li class="dropdown">
-                          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
-                          Actions <span class="caret">
-                          </a>
+                <div class="modal fade" id="updateLifter{{ item.id }}" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+                        <h4 class="modal-title">Update Lifter</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-signin" action="/lifter/{{ item.id }}/update" method="post">
+                          <fieldset>
+                            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                            <div class="form-group">
+                              <label for="firstname">First Name</label>
+                              <input class="form-control" type="text" name="firstname" value="{{ item.firstname }}" required="required"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="lastname">Last Name</label>
+                              <input class="form-control" type="text" name="lastname" value="{{ item.lastname }}" required="required"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="age">Age</label>
+                              <select class="form-control" name="age">
+                                <option value="{{ item.age }}"selected="selected">{{ item.age }}</option>
+                                {% for i in range(14, 85) %}
+                                   <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label for="email">Email Address</label>
+                              <input class="form-control" type="email", name="email" value="{{ item.email }}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="address">Address</label>
+                              <input class="form-control" type="text" name="address" value="{{ item.address }}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="city">City</label>
+                              <input class="form-control" type="text" name="city" value="{{ item.city }}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="state">State</label>
+                              <input class="form-control" type="text" name="state" value="{{ item.state }}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="zip">zip</label>
+                              <input class="form-control" type="text" name="zip" value="{{ item.zip }}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="tshirt">Tshirt Size</label>
+                              <select class="form-control" name="tshirt_size">
+                                <option value="{{ item.tshirt_size }}"selected="selected">{{ item.tshirt_size }}</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL</option>
+                                <option value="3XL">3XL</option>
+                                <option value="4XL">4XL</option>
+                                <option value="5XL">5XL</option>
+                              </select>
+                            </div>
+                            <div class="form-group">
+                              <label for="phone">Phone</label>
+                              <input class="form-control" type="text" name="phone" value="{{ item.phone }}" required="required"/>
+                            </div>
 
-                          <ul class="dropdown-menu">
-                            <li>
-                              <a data-toggle="modal" data-target="#updateLifter{{ item.id }}"> Update Lifter</a>
-                            </li>
-                            <li>
-                              <a data-toggle="modal" data-target="#deleteLifter{{ item.id }}"> Delete Lifter </a>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
+                            <hr/>
 
-                  <div class="modal fade" id="updateLifter{{ item.id }}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
-                          <h4 class="modal-title">Update Lifter</h4>
-                        </div>
-                        <div class="modal-body">
-                          <form class="form-signin" action="/lifter/{{ item.id }}/update" method="post">
-                            <fieldset>
-                              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                              <div class="form-group">
-                                <label for="firstname">First Name</label>
-                                <input class="form-control" type="text" name="firstname" value="{{ item.firstname }}" required="required"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="lastname">Last Name</label>
-                                <input class="form-control" type="text" name="lastname" value="{{ item.lastname }}" required="required"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="age">Age</label>
-                                <select class="form-control" name="age">
-                                  <option value="{{ item.age }}"selected="selected">{{ item.age }}</option>
-                                  {% for i in range(14, 85) %}
-                                     <option value="{{ i }}">{{ i }}</option>
-                                  {% endfor %}
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input class="form-control" type="email", name="email" value="{{ item.email }}"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="address">Address</label>
-                                <input class="form-control" type="text" name="address" value="{{ item.address }}"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="city">City</label>
-                                <input class="form-control" type="text" name="city" value="{{ item.city }}"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="state">State</label>
-                                <input class="form-control" type="text" name="state" value="{{ item.state }}"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="zip">zip</label>
-                                <input class="form-control" type="text" name="zip" value="{{ item.zip }}"/>
-                              </div>
-                              <div class="form-group">
-                                <label for="tshirt">Tshirt Size</label>
-                                <select class="form-control" name="tshirt_size">
-                                  <option value="{{ item.tshirt_size }}"selected="selected">{{ item.tshirt_size }}</option>
-                                  <option value="XS">XS</option>
-                                  <option value="S">S</option>
-                                  <option value="M">M</option>
-                                  <option value="L">L</option>
-                                  <option value="XL">XL</option>
-                                  <option value="2XL">2XL</option>
-                                  <option value="3XL">3XL</option>
-                                  <option value="4XL">4XL</option>
-                                  <option value="5XL">5XL</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input class="form-control" type="text" name="phone" value="{{ item.phone }}" required="required"/>
-                              </div>
+                            <button class="btn btn-block btn-primary" type="submit">Update Lifter</button>
+                          </fieldset>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                              <hr/>
+                <div class="modal fade" id="deleteLifter{{ item.id }}" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+                        <h4 class="modal-title">Delete Lifter</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-signin" action="/lifter/{{ item.id }}/delete" method="post">
+                          <fieldset>
+                            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-                              <button class="btn btn-block btn-primary" type="submit">Update Lifter</button>
-                            </fieldset>
-                          </form>
-                        </div>
+                            <h4> ARE YOU SURE YOU WANT TO DELETE, {{ item.firstname }} {{ item.lastname }}? </h4>
+
+                            <hr/>
+
+                            <button class="btn btn-block btn-primary" type="submit">Delete</button>
+                            <button data-dismiss="modal" class="btn btn-block btn-default" aria-label="close">Cancel</a>
+                          </fieldset>
+                        </form>
                       </div>
                     </div>
                   </div>
 
-                  <div class="modal fade" id="deleteLifter{{ item.id }}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
-                          <h4 class="modal-title">Delete Lifter</h4>
-                        </div>
-                        <div class="modal-body">
-                          <form class="form-signin" action="/lifter/{{ item.id }}/delete" method="post">
-                            <fieldset>
-                              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-                              <h4> ARE YOU SURE YOU WANT TO DELETE, {{ item.firstname }} {{ item.lastname }}? </h4>
-
-                              <hr/>
-
-                              <button class="btn btn-block btn-primary" type="submit">Delete</button>
-                              <button data-dismiss="modal" class="btn btn-block btn-default" aria-label="close">Cancel</a>
-                            </fieldset>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
