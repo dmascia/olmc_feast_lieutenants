@@ -67,6 +67,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: models => {
 
         Users.hasMany(models.Lifters);
+        Users.hasMany(models.Payments);
       }
     }
   });

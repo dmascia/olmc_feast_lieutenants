@@ -12,7 +12,14 @@ const config = {
       name: 'olmc_feast_lieutenants'
     },
     port: process.env.PORT || 3000,
-    db: 'mysql://root:root@localhost:8889/olmcfeast'
+    db: 'mysql://root:root@localhost:8889/olmcfeast',
+    paypal: {
+      env: "sandbox",
+      clientId: null
+    },
+    transporter: {
+      key: null
+    }
   }
 };
 

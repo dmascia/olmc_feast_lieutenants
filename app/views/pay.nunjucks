@@ -1,0 +1,165 @@
+{% extends 'layout.nunjucks' %}
+
+{% block content %}
+
+  <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+  <div class="row">
+
+    <div class="col-md-6 col-md-offset-3">
+      <h1 class="text-center">OLMC Lieutenants Website</h1>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-6 col-md-offset-3">
+
+      <h2 id="success" class="text-center" style="display:none"></h2>
+
+      <div class="panel panel-primary" id="paypalForm">
+        <div class="panel-heading">
+
+          <h3 class="panel-title">Pay Lifter Dues...</h3>
+        </div>
+
+        <div class="panel-body">
+
+          {% if error %}
+            <div class="alert alert-danger">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error!</strong> {{ error }}
+            </div>
+          {% endif %}
+
+          <div class="alert alert-danger" id="formErrors" style="display: none;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> <span id="error"></span>
+          </div>
+
+          <form class="form-signin">
+            <fieldset>
+              <div class="form-group">
+                <label for="firstname">First name</label>
+                <input type="text" id="firstname" name="firstname" placeholder="my first name" onblur="firstNameValidation()" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="lastname">Last name</label>
+                <input type="text" id="lastname" name="lastname" placeholder="my last name" onblur="lasttNameValidation()" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="lieutenant">Lieutenant</label>
+                <select class="form-control" id="lieutenant" name="lieutenant">
+                  {% for item in data %}
+                     <option value="{{ item.id }}">{{ item.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div style="display: table; margin: auto;" id="paypal-button"></div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>&nbsp;</p>
+
+  <script>
+
+    function firstNameValidation() {
+
+      if ($("#firstname").val() === "") {
+
+        $("#formErrors").css("display", "block");
+        $("#formErrors #error").html("<br/> First Name is required!");
+      } else {
+
+        $("#formErrors").css("display", "none");
+      }
+    }
+
+    function lasttNameValidation() {
+
+      if ($("#lastname").val() === "") {
+
+        $("#formErrors").css("display", "block");
+        $("#formErrors #error").html("<br/> Last Name is required!");
+      } else {
+
+        $("#formErrors").css("display", "none");
+      }
+    }
+
+    paypal.Button.render({
+
+      env: "{{ paypal.env }}",
+
+      {% if paypal.env == "sandbox" %}
+
+        client: {
+          sandbox: "{{ paypal.clientId }}"
+        },
+      {% else %}
+
+        client: {
+          production: "{{ paypal.clientId }}"
+        },
+      {% endif %}
+
+      payment: function() {
+        
+        return paypal.rest.payment.create(this.props.env, this.props.client, {
+          transactions: [
+            {
+              amount: { total: '100.00', currency: 'USD' },
+              item_list: {
+                items: [
+                  {
+                    "name": $("#firstname").val() + " " + $("#lastname").val(),
+                    "price": "100.00",
+                    "currency": "USD",
+                    "quantity": "1",
+                    "description": $("#firstname").val() + " " + $("#lastname").val() + " Lifter Dues $100.00"
+                  }
+                ]
+              }
+            }
+          ]
+        });
+      },
+
+      commit: true,
+
+      onAuthorize: function(data, actions) {
+
+        return actions.payment.execute().then(function() {
+
+          data.firstname = $("#firstname").val();
+          data.lastname = $("#lastname").val();
+          data.UserId = $("#lieutenant").val();
+
+          paypal.request.post("/execute-payment", {
+            _csrf: "{{ csrfToken }}",
+            payment: JSON.stringify(data)
+          })
+          .then(function(data) {
+
+            if (data === "OK") {
+
+              $("#paypalForm").hide();
+              $("#success").show();
+              $("#success").html("Thank you for your dues: " + $("#firstname").val() + " " + $("#lastname").val());
+            }
+
+            return;
+          })
+          .catch(function(err) { throw new Error(err); });
+        });
+      }
+
+    }, '#paypal-button');
+  </script>
+
+{% endblock %}
