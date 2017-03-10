@@ -15,7 +15,7 @@
 
       <hr>
 
-      <h3> Total Lifters: <span style="color: red;">{{ lifterCount }}</span> | Lifters In: <span style="color: red;">{{ lifterCount }}</span> | Lifters Out: <span style="color: red;">{{ lifterCount }}</span> </h3>
+      <h3> Total Lifters: <span style="color: red;">{{ lifterCount }}</span> | Lifters In: <span style="color: red;">{{ lifterInCount }}</span> | Lifters Out: <span style="color: red;">{{ liftersOutCount }}</span> </h3>
 
       <hr>
 
@@ -68,7 +68,7 @@
                   <td> {{ item.phone }} </td>
                   <td> {{ item.email }} </td>
                   <td> {{ item.tshirt_size }} </td>
-                  <td> OUT </td>
+                  <td> {{ item.status }} </td>
                   <td>
 
                     <ul class="nav">

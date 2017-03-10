@@ -16,8 +16,12 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
       const flashMessage = req.flash();
 
+      let lifterResult = [],
+          lifterCount = 0;
+
       db.Lifters.findAndCountAll({
-        where: { UserId: req.user.id }
+        where: { UserId: req.user.id },
+        order: 'lastname ASC'
       })
       .then( liftersResult => {
 
@@ -26,13 +30,67 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           throw new Error("no lifters found!");
         }
 
+        lifterCount = liftersResult.count;
+        lifterResult = liftersResult.rows;
+
+        let likeThisYear = "" + new Date().getFullYear() + "%";
+
+        return db.sequelize.query("SELECT firstname, lastname FROM Payments WHERE UserId = 8 AND createdAt LIKE '" + likeThisYear + "';");
+      })
+      .then( paymentsResult => {
+
+        let liftersData = [],
+            lifterInCount = 0;
+
+        if (paymentsResult[0].length > 1) {
+
+          liftersData = lifterResult.map( lifter => {
+
+            let newLifter = {
+              id: lifter.dataValues.id,
+              firstname: lifter.dataValues.firstname,
+              lastname: lifter.dataValues.lastname,
+              email: lifter.dataValues.email,
+              address: lifter.dataValues.address,
+              city: lifter.dataValues.city,
+              state: lifter.dataValues.state,
+              zip: lifter.dataValues.zip,
+              tshirt_size: lifter.dataValues.tshirt_size,
+              phone: lifter.dataValues.phone,
+              dob: lifter.dataValues.dob,
+              UserId: lifter.dataValues.UserId,
+              status: "OUT"
+            };
+
+            paymentsResult[0].forEach( payment => {
+
+              if (
+                payment.firstname === lifter.dataValues.firstname &&
+                payment.lastname === lifter.dataValues.lastname
+              ) {
+
+                lifterInCount++;
+
+                newLifter.status = "IN";
+              }
+            });
+
+            return newLifter;
+          });
+        } else {
+
+          liftersData = lifterResult;
+        }
+
         return res.render('lieutenant', {
           lieutenant: `${req.user.firstname} ${req.user.lastname}`,
-          lifterCount: liftersResult.count,
-          lifters: liftersResult.rows,
+          lifterCount: lifterCount,
+          liftersOutCount: (lifterCount - lifterInCount),
+          lifterInCount: lifterInCount,
+          lifters: liftersData,
           csrfToken: req.csrfToken(),
           success: (flashMessage.success) ? flashMessage.success[0] : "",
-          error: (flashMessage.error) ? flashMessage.error[0] : "",
+          error: (flashMessage.error) ? flashMessage.error[0] : ""
         });
       })
       .catch( error => {
@@ -42,9 +100,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
         return res.render('lieutenant', {
           lieutenant: `${req.user.firstname} ${req.user.lastname}`,
           lifterCount: 0,
-          csrfToken: req.csrfToken(),
-          success: (flashMessage.success) ? flashMessage.success[0] : "",
-          error: "no lifters found!",
+          error: "no lifters found!"
         });
       });
   });
