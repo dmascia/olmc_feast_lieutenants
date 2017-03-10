@@ -43,30 +43,32 @@
           <table class="table table-condensed table-striped">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Lifter</th>
+                <th>DOB</th>
+                <th>Address</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th>Street</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Zip</th>
-                <th>TShirt Size</th>
-                <th>Age</th>
+                <th>Shirt Size</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {% for item in lifters %}
                 <tr>
-                  <td>{{ item.firstname }} {{ item.lastname }}</td>
-                  <td>{{ item.phone }}</td>
-                  <td>{{ item.email }}</td>
-                  <td>{{ item.address }}</td>
-                  <td>{{ item.city }}</td>
-                  <td>{{ item.state }}</td>
-                  <td>{{ item.zip }} </td>
-                  <td>{{ item.tshirt_size }}</td>
-                  <td> {{ item.age }} </h4>
+                  <td> {{ item.firstname }} {{ item.lastname }} </td>
+                  <td> {{ item.age }} </td>
+                  <td>
+                    <address>
+                      {{ item.address }} <br/>
+                      {{ item.city }}, {{ item.state }} <br/>
+                      {{ item.zip }}
+                    </address>
+                  </td>
+                  <td> {{ item.phone }} </td>
+                  <td> {{ item.email }} </td>
+                  <td> {{ item.tshirt_size }} </td>
+                  <td> OUT </td>
                   <td>
 
                     <ul class="nav">
