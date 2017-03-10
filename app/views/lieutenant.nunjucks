@@ -57,7 +57,7 @@
               {% for item in lifters %}
                 <tr>
                   <td> {{ item.firstname }} {{ item.lastname }} </td>
-                  <td> {{ item.age }} </td>
+                  <td> {{ item.dob }} </td>
                   <td>
                     <address>
                       {{ item.address }} <br/>

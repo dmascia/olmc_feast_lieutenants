@@ -45,14 +45,17 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
-    age: {
-      type: DataTypes.INTEGER(2),
+    dob: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    isRemoved: {
+      type: DataTypes.INTEGER(1),
       allowNull: false
     }
   },
   {
-    tableName: 'Lifters',
-    timestamps: false,
+    tableName: 'Lifters'
   });
 
 
