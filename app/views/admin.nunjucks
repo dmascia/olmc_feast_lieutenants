@@ -42,7 +42,7 @@
                 </tr>
               </thead>
               <tbody>
-                {% for item in data %}
+                {% for item in lieutenants %}
                   <tr>
                     <td>{{ item.firstname }} {{ item.lastname }}</td>
                     <td>{{ item.username }}</td>
@@ -138,7 +138,7 @@
               </tbody>
             </table>
 
-            {% if count < 8 %}
+            {% if lieutenantCount < 8 %}
               <button class="btn btn-primary" data-toggle="modal", data-target="#addLieutenant">Add A Lieutenant</button>
             {% endif %}
 
