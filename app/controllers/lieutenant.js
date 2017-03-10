@@ -79,7 +79,24 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           });
         } else {
 
-          liftersData = lifterResult;
+          liftersData = lifterResult.map( lifter => {
+
+            return {
+              id: lifter.dataValues.id,
+              firstname: lifter.dataValues.firstname,
+              lastname: lifter.dataValues.lastname,
+              email: lifter.dataValues.email,
+              address: lifter.dataValues.address,
+              city: lifter.dataValues.city,
+              state: lifter.dataValues.state,
+              zip: lifter.dataValues.zip,
+              tshirt_size: lifter.dataValues.tshirt_size,
+              phone: lifter.dataValues.phone,
+              dob: lifter.dataValues.dob,
+              UserId: lifter.dataValues.UserId,
+              status: "OUT"
+            };
+          });
         }
 
         return res.render('lieutenant', {
