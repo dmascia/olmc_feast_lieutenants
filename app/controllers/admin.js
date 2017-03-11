@@ -54,7 +54,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
         let data = [],
             grandTotal = 0,
-            grandTotalIn = 0;
+            grandTotalIn = 0,
+            lifterMarkedDelete = [];
 
         if (paymentsResult[0].length > 1) {
           data = lieutenantData.map( user => {
@@ -67,6 +68,22 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
               if (lifter.dataValues.UserId === user.dataValues.id) {
 
                 lifterCount++;
+
+                if (lifter.dataValues.isRemoved === 1) {
+
+                  lifterMarkedDelete.push({
+                    ltname: `${user.dataValues.firstname} ${user.dataValues.lastname}`,
+                    lifterId: lifter.dataValues.id,
+                    firstname: lifter.dataValues.firstname,
+                    lastname: lifter.dataValues.lastname,
+                    email: lifter.dataValues.email,
+                    address: lifter.dataValues.address,
+                    city: lifter.dataValues.city,
+                    state: lifter.dataValues.state,
+                    zip: lifter.dataValues.zip,
+                    phone: lifter.dataValues.phone
+                  });
+                }
               }
 
               paymentsResult[0].forEach( payment => {
@@ -110,6 +127,22 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
               if (lifter.dataValues.UserId === user.dataValues.id) {
 
                 lifterCount++;
+
+                if (lifter.dataValues.isRemoved === 1) {
+
+                  lifterMarkedDelete.push({
+                    ltname: `${user.dataValues.firstname} ${user.dataValues.lastname}`,
+                    lifterId: lifter.dataValues.id,
+                    firstname: lifter.dataValues.firstname,
+                    lastname: lifter.dataValues.lastname,
+                    email: lifter.dataValues.email,
+                    address: lifter.dataValues.address,
+                    city: lifter.dataValues.city,
+                    state: lifter.dataValues.state,
+                    zip: lifter.dataValues.zip,
+                    phone: lifter.dataValues.phone
+                  });
+                }
               }
             });
 
@@ -132,9 +165,12 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           });
         }
 
+        lifterMarkedDelete.sort();
+
         return res.render('admin', {
           lieutenantCount: lieutenantCount,
           lieutenants: data,
+          lifterMarkedDelete: lifterMarkedDelete,
           grandTotalIn: grandTotalIn.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'),
           grandTotal: grandTotal.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'),
           csrfToken: req.csrfToken(),

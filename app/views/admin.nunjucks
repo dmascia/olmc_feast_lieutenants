@@ -8,7 +8,28 @@
 
       <h1>Welcome Lieutenant Administrator</h1>
 
-      <hr>
+      <hr/>
+
+      {% if success %}
+          <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Success!</strong> {{ success }}
+          </div>
+      {% endif %}
+      {% if error %}
+        <div class="alert alert-danger">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Error!</strong> {{ error }}
+        </div>
+      {% endif %}
+
+      {% if lieutenantCount < 8 %}
+        <button class="btn btn-primary" data-toggle="modal", data-target="#addLieutenant">Add A Lieutenant</button>
+      {% endif %}
+
+      <a href="/logout" class="btn btn-info">Logout</a>
+
+      <hr/>
 
       <div class="panel panel-primary">
         <div class="panel-heading">
@@ -18,18 +39,7 @@
 
         <div class="panel-body">
 
-          {% if success %}
-            <div class="alert alert-success">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Success!</strong> {{ success }}
-            </div>
-          {% endif %}
-          {% if error %}
-            <div class="alert alert-danger">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Error!</strong> {{ error }}
-            </div>
-          {% endif %}
+          <hr/>
 
           <div class="table">
             <table class="table">
@@ -152,18 +162,98 @@
                 </tr>
               </tbody>
             </table>
-
-
-          {% if lieutenantCount < 8 %}
-            <button class="btn btn-primary" data-toggle="modal", data-target="#addLieutenant">Add A Lieutenant</button>
-          {% endif %}
-
-          <a href="/logout" class="btn btn-info">Logout</a>
+          </div>
         </div>
       </div>
+
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+
+            <h3 class="panel-title">Lifters Requesting Removal</h3>
+          </div>
+
+          <div class="panel-body">
+
+            <hr/>
+
+            <div class="table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Lieutenant</th>
+                    <th>Lifter</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in lifterMarkedDelete %}
+                    <tr>
+                      <td>{{ item.ltname }}</td>
+                      <td>{{ item.firstname }} {{ item.lastname }}</td>
+                      <td>
+                        <address>
+                          {{ item.address }} <br/>
+                          {{ item.city }}, {{ item.state }} <br/>
+                          {{ item.zip }}
+                        </address>
+                      </td>
+                      <td> {{ item.phone }} </td>
+                      <td> {{ item.email }} </td>
+                      <td>
+
+                        <ul class="nav">
+                          <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                            Actions <span class="caret">
+                            </a>
+
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a data-toggle="modal" data-target="#deleteLifter{{ item.lifterId }}"> Delete Lifter</a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+
+                    <div class="modal fade" id="deleteLifter{{ item.lifterId }}" tabindex="-1" role="dialog">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+                            <h4 class="modal-title">Delete Lifter</h4>
+                          </div>
+                          <div class="modal-body">
+                            <form class="form-signin" action="/lifter/{{ item.lifterId }}/delete" method="post">
+                              <fieldset>
+                                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                                <h4> ARE YOU SURE YOU WANT TO DELETE, {{ item.firstname }} {{ item.lastname }}? </h4>
+
+                                <hr/>
+
+                                <button class="btn btn-block btn-primary" type="submit">Delete</button>
+                                <button data-dismiss="modal" class="btn btn-block btn-default" aria-label="close">Cancel</a>
+                              </fieldset>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
-</div>
 
 
   <div class="modal fade" id="addLieutenant" tabindex="-1" role="dialog">
