@@ -70,9 +70,6 @@
                             <li>
                               <a data-toggle="modal" data-target="#changeLieutenant{{ item.id }}"> Change Lieutenant Password </a>
                             </li>
-                            <li>
-                              <a href="/lieutenant/{{ item.id }}/lifters"> View Lieutenant Lifters </a>
-                            </li>
                           </ul>
                         </li>
                       </ul>
