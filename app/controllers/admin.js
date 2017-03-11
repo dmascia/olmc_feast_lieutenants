@@ -16,7 +16,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
       const flashMessage = req.flash();
 
       let lieutenantCount,
-          lieutenantData;
+          lieutenantData,
+          liftersData;
 
       db.Users.findAndCountAll({
         where: { roles: "LIEUTENANT" },
@@ -43,33 +44,99 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           throw new Error("no lifters found");
         }
 
-        const data = lieutenantData.map( user => {
+        liftersData = liftersResult;
 
-          let lifterCount = 0;
+        let likeThisYear = "" + new Date().getFullYear() + "%";
 
-          liftersResult.forEach( lifter => {
+        return db.sequelize.query("SELECT firstname, lastname FROM Payments WHERE UserId = 8 AND createdAt LIKE '" + likeThisYear + "' ORDER BY lastname ASC;");
+      })
+      .then( paymentsResult => {
 
-            if (lifter.dataValues.UserId === user.dataValues.id) {
+        let data = [],
+            grandTotal = 0,
+            grandTotalIn = 0;
 
-              lifterCount++;
-            }
+        if (paymentsResult[0].length > 1) {
+          data = lieutenantData.map( user => {
+
+            let lifterCount = 0,
+                lifterInCount = 0;
+
+            liftersData.forEach( lifter => {
+
+              if (lifter.dataValues.UserId === user.dataValues.id) {
+
+                lifterCount++;
+              }
+
+              paymentsResult[0].forEach( payment => {
+
+                if (
+                  payment.firstname.toLowerCase() === lifter.dataValues.firstname.toLowerCase() &&
+                  payment.lastname.toLowerCase() === lifter.dataValues.lastname.toLowerCase()
+                ) {
+
+                  lifterInCount++;
+                }
+              });
+            });
+
+            grandTotalIn = (grandTotalIn + (lifterInCount * 100.00));
+            grandTotal = (grandTotal + (lifterCount * 100.00));
+
+            return {
+              id: user.dataValues.id,
+              username: user.dataValues.username,
+              firstname: user.dataValues.firstname,
+              lastname: user.dataValues.lastname,
+              email: user.dataValues.email,
+              totals: {
+                lifters: lifterCount,
+                in: lifterInCount,
+                out: (lifterCount - lifterInCount),
+                amountIn: (lifterInCount * 100.00).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'),
+                amountExpected: (lifterCount * 100.00).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+              }
+            };
           });
+        } else {
 
-          return {
-            id: user.dataValues.id,
-            username: user.dataValues.username,
-            firstname: user.dataValues.firstname,
-            lastname: user.dataValues.lastname,
-            email: user.dataValues.email,
-            totals: {
-              lifters: lifterCount
-            }
-          };
-        }, []);
+          data = lieutenantData.map( user => {
+
+            let lifterCount = 0;
+
+            liftersData.forEach( lifter => {
+
+              if (lifter.dataValues.UserId === user.dataValues.id) {
+
+                lifterCount++;
+              }
+            });
+
+            grandTotal = (grandTotal + (lifterCount * 100.00));
+
+            return {
+              id: user.dataValues.id,
+              username: user.dataValues.username,
+              firstname: user.dataValues.firstname,
+              lastname: user.dataValues.lastname,
+              email: user.dataValues.email,
+              totals: {
+                lifters: lifterCount,
+                in: 0,
+                out: lifterCount,
+                amountIn: 0,
+                amountExpected: (lifterCount * 100.00).toFixed(2)
+              }
+            };
+          });
+        }
 
         return res.render('admin', {
           lieutenantCount: lieutenantCount,
           lieutenants: data,
+          grandTotalIn: grandTotalIn.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'),
+          grandTotal: grandTotal.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'),
           csrfToken: req.csrfToken(),
           success: (flashMessage.success) ? flashMessage.success[0] : "",
           error: (flashMessage.error) ? flashMessage.error[0] : ""
