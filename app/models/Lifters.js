@@ -19,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     address: {
       type: DataTypes.STRING,
@@ -47,15 +47,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     dob: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     isRemoved: {
       type: DataTypes.INTEGER(1),
-      allowNull: false
+      allowNull: true
     },
-    islifter: {
+    isNotLifter: {
       type: DataTypes.INTEGER(1),
-      allowNull: false
+      allowNull: true
     }
   },
   {

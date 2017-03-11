@@ -59,6 +59,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
             let newLifter = {
                 id: lifter.dataValues.id,
+                isNotLifter: lifter.dataValues.isNotLifter,
                 firstname: lifter.dataValues.firstname,
                 lastname: lifter.dataValues.lastname,
                 email: lifter.dataValues.email,
@@ -120,6 +121,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
             return {
               id: lifter.dataValues.id,
+              isNotLifter: lifter.dataValues.isNotLifter,
               firstname: lifter.dataValues.firstname,
               lastname: lifter.dataValues.lastname,
               email: lifter.dataValues.email,
@@ -138,6 +140,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
         return res.render('lieutenant', {
           lieutenant: `${req.user.firstname} ${req.user.lastname}`,
+          lieutenantId: req.user.id,
           lifterCount: lifterCount,
           liftersOutCount: (lifterCount - lifterInCount),
           lifterInCount: lifterInCount,
@@ -154,6 +157,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
         return res.render('lieutenant', {
           lieutenant: `${req.user.firstname} ${req.user.lastname}`,
+          lieutenantId: req.user.id,
           lifterCount: 0,
           error: "no lifters found!"
         });

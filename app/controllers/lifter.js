@@ -91,4 +91,32 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
       });
   });
 
+  router.post('/:lifter/paid',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('LIEUTENANT'),
+    (req, res) => {
+
+      const lifter = req.body;
+      const lifterId = req.params.lifter;
+
+      db.Payments.create(lifter)
+        .then( createPaymentResult => {
+
+          if (!createPaymentResult) {
+
+            req.flash("error", "Could not mark lifter as paid");
+            return res.redirect('/lieutenant/');
+          }
+
+          req.flash("success", `Lifter ${lifter.firstname} ${lifter.lastname} has paid his dues!`);
+          return res.redirect('/lieutenant/');
+        })
+        .catch( error => {
+
+          console.error("CREATE LIFTER PAYMENT ERROR", error);
+          req.flash("error", "Could not mark lifter as paid");
+          return res.redirect('/lieutenant/');
+        });
+    });
+
 };

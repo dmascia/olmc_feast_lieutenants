@@ -6,7 +6,7 @@
 
     <div class="col-md-12">
 
-      <h1>Welcome {{ lieutenant }}, It's A Number TWO!!!</h1>
+      <h1>Welcome {{ lieutenant }}</h1>
 
       <hr>
 
@@ -67,7 +67,13 @@
             <tbody>
               {% for item in lifters %}
                 <tr>
-                  <td> {{ item.firstname }} {{ item.lastname }} </td>
+                  <td>
+                    {% if item.isNotLifter == 1 %}
+                       *** {{ item.firstname }} {{ item.lastname }}
+                    {% else %}
+                      {{ item.firstname }} {{ item.lastname }}
+                    {% endif %}
+                  </td>
                   <td> {{ item.dob }} </td>
                   <td>
                     <address>
@@ -89,6 +95,9 @@
                         </a>
 
                         <ul class="dropdown-menu">
+                          <li>
+                            <a data-toggle="modal" data-target="#markPaid{{ item.id }}"> Mark Paid </a>
+                          </li>
                           <li>
                             <a data-toggle="modal" data-target="#updateLifter{{ item.id }}"> Update Lifter</a>
                           </li>
@@ -121,13 +130,15 @@
                               <input class="form-control" type="text" name="lastname" value="{{ item.lastname }}" required="required"/>
                             </div>
                             <div class="form-group">
-                              <label for="age">Age</label>
-                              <select class="form-control" name="age">
-                                <option value="{{ item.age }}"selected="selected">{{ item.age }}</option>
-                                {% for i in range(14, 85) %}
-                                   <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                              </select>
+                              <label for="age">DOB</label>
+                              <input class="form-control" type="test" name="dob" value="{{ item.dob }}"/>
+                            </div>
+                            <div class="form-group">
+                              {% if item.isNotLifter == 1 %}
+                                <input type="checkbox" name="isNotLifter" value="1" checked> <strong>Doesn't Not Lift?</strong></label>
+                              {% else %}
+                                <input type="checkbox" name="isNotLifter" value="1"> <strong>Doesn't Not Lift?</strong></label>
+                              {% endif %}
                             </div>
                             <div class="form-group">
                               <label for="email">Email Address</label>
@@ -205,7 +216,36 @@
                       </div>
                     </div>
                   </div>
+                </div>
 
+                <div class="modal fade" id="markPaid{{ item.id }}" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button class="btn close" data-dismiss="modal" aria-label="Close"> &times;</button>
+                        <h4 class="modal-title">Delete Lifter</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-signin" action="/lifter/{{ item.id }}/paid" method="post">
+                          <fieldset>
+                            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                            <input type="hidden" name="intent" value="Check">
+                            <input type="hidden" name="firstname" value="{{ item.firstname }}">
+                            <input type="hidden" name="lastname" value="{{ item.lastname }}">
+                            <input type="hidden" name="UserId" value="{{ lieutenantId }}">
+
+                            <h4> ARE YOU SURE, {{ item.firstname }} {{ item.lastname }} HAS PAID HIS DUES? </h4>
+
+                            <hr/>
+
+                            <button class="btn btn-block btn-primary" type="submit">Paid</button>
+                            <button data-dismiss="modal" class="btn btn-block btn-default" aria-label="close">Cancel</a>
+                          </fieldset>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               {% endfor %}
             </tbody>
           </table>
@@ -235,16 +275,15 @@
                 <input class="form-control" type="text" name="lastname" placeholder="Last Name" required="required"/>
               </div>
               <div class="form-group">
-                <label for="age">Age</label>
-                <select class="form-control" name="age">
-                  {% for i in range(14, 85) %}
-                     <option value="{{ i }}">{{ i }}</option>
-                  {% endfor %}
-                </select>
+                <label for="age">DOB</label>
+                <input class="form-control" type="text" name="dob" placeholder="MM/DD/YYYY (01/31/1982)"/>
+              </div>
+              <div class="form-group">
+                <input type="checkbox" name="isNotLifter" value="1"> <strong>Doesn't Not Lift?</strong></label>
               </div>
               <div class="form-group">
                 <label for="email">Email Address</label>
-                <input class="form-control" type="email", name="email" placeholder="Email"/>
+                <input class="form-control" type="email" name="email" placeholder="Email"/>
               </div>
               <div class="form-group">
                 <label for="address">Address</label>

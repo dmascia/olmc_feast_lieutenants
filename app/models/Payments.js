@@ -19,15 +19,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     paymentToken: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     payerID: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     paymentID: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     intent: {
       type: DataTypes.STRING,
