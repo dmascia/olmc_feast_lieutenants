@@ -19,6 +19,30 @@
 
       <hr>
 
+      {% if success %}
+        <div class="alert alert-success">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Success!</strong> {{ success }}
+        </div>
+      {% endif %}
+      {% if error %}
+        <div class="alert alert-danger">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Error!</strong> {{ error }}
+        </div>
+      {% endif %}
+
+      {% if lifterNotFoundInPayments %}
+        <div class="alert alert-danger">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>Warning!</strong> <br/>
+          {% for item in lifterNotFoundInPayments %}
+
+            {{ item.firstname }} {{ item.lastname }} has paid his dues but is not in your list! <br/>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <div class="panel panel-primary">
         <div class="panel-heading">
 
@@ -26,19 +50,6 @@
         </div>
 
         <div class="panel-body">
-
-          {% if success %}
-            <div class="alert alert-success">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Success!</strong> {{ success }}
-            </div>
-          {% endif %}
-          {% if error %}
-            <div class="alert alert-danger">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Error!</strong> {{ error }}
-            </div>
-          {% endif %}
 
           <table class="table table-condensed table-striped">
             <thead>

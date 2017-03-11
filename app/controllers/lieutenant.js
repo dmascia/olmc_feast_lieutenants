@@ -35,48 +35,75 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
         let likeThisYear = "" + new Date().getFullYear() + "%";
 
-        return db.sequelize.query("SELECT firstname, lastname FROM Payments WHERE UserId = 8 AND createdAt LIKE '" + likeThisYear + "';");
+        return db.sequelize.query("SELECT firstname, lastname FROM Payments WHERE UserId = 8 AND createdAt LIKE '" + likeThisYear + "' ORDER BY lastname ASC;");
       })
       .then( paymentsResult => {
 
         let liftersData = [],
-            lifterInCount = 0;
+            lifterInCount = 0,
+            lifterNotFoundInPayments = [];
 
         if (paymentsResult[0].length > 1) {
 
           liftersData = lifterResult.map( lifter => {
 
             let newLifter = {
-              id: lifter.dataValues.id,
-              firstname: lifter.dataValues.firstname,
-              lastname: lifter.dataValues.lastname,
-              email: lifter.dataValues.email,
-              address: lifter.dataValues.address,
-              city: lifter.dataValues.city,
-              state: lifter.dataValues.state,
-              zip: lifter.dataValues.zip,
-              tshirt_size: lifter.dataValues.tshirt_size,
-              phone: lifter.dataValues.phone,
-              dob: lifter.dataValues.dob,
-              UserId: lifter.dataValues.UserId,
-              status: "OUT"
-            };
+                id: lifter.dataValues.id,
+                firstname: lifter.dataValues.firstname,
+                lastname: lifter.dataValues.lastname,
+                email: lifter.dataValues.email,
+                address: lifter.dataValues.address,
+                city: lifter.dataValues.city,
+                state: lifter.dataValues.state,
+                zip: lifter.dataValues.zip,
+                tshirt_size: lifter.dataValues.tshirt_size,
+                phone: lifter.dataValues.phone,
+                dob: lifter.dataValues.dob,
+                UserId: lifter.dataValues.UserId,
+                status: "OUT"
+              },
+              paymentFound = false;
 
             paymentsResult[0].forEach( payment => {
 
               if (
-                payment.firstname === lifter.dataValues.firstname &&
-                payment.lastname === lifter.dataValues.lastname
+                payment.firstname.toLowerCase() === lifter.dataValues.firstname.toLowerCase() &&
+                payment.lastname.toLowerCase() === lifter.dataValues.lastname.toLowerCase()
               ) {
 
                 lifterInCount++;
-
+                paymentFound = true;
                 newLifter.status = "IN";
               }
             });
 
             return newLifter;
           });
+
+          paymentsResult[0].forEach( payment => {
+
+            let found = false;
+
+            lifterResult.map( lifter => {
+
+              if (
+                payment.firstname.toLowerCase() === lifter.dataValues.firstname.toLowerCase() &&
+                payment.lastname.toLowerCase() === lifter.dataValues.lastname.toLowerCase()
+              ) {
+
+                found = true;
+              }
+            });
+
+            if (!found) {
+
+              lifterNotFoundInPayments.push({
+                firstname: payment.firstname,
+                lastname: payment.lastname
+              });
+            }
+          });
+
         } else {
 
           liftersData = lifterResult.map( lifter => {
@@ -105,6 +132,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           liftersOutCount: (lifterCount - lifterInCount),
           lifterInCount: lifterInCount,
           lifters: liftersData,
+          lifterNotFoundInPayments: lifterNotFoundInPayments,
           csrfToken: req.csrfToken(),
           success: (flashMessage.success) ? flashMessage.success[0] : "",
           error: (flashMessage.error) ? flashMessage.error[0] : ""
