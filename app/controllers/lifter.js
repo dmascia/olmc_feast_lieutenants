@@ -38,7 +38,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
   router.post('/:lifter/delete',
     ensureLogin.ensureLoggedIn('/'),
-    isAuthorized('LIEUTENANT'),
+    isAuthorized('ADMIN'),
     (req, res) => {
 
       db.Lifters.destroy({ where: { id: req.params.lifter } })
@@ -47,17 +47,17 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           if (!deleteResult) {
 
             req.flash("error", "Could not delete lifter");
-            return res.redirect('/lieutenant/');
+            return res.redirect('/admin/');
           }
 
           req.flash("success", `Lifter has been created!`);
-          return res.redirect('/lieutenant/');
+          return res.redirect('/admin/');
         })
         .catch( error => {
 
           console.error("LIFTER DELETE ERROR", error);
           req.flash("error", "Could not delete lifter");
-          return res.redirect('/lieutenant/');
+          return res.redirect('/admin/');
         });
   });
 

@@ -187,9 +187,12 @@
                         <h4 class="modal-title">Delete Lifter</h4>
                       </div>
                       <div class="modal-body">
-                        <form class="form-signin" action="/lifter/{{ item.id }}/delete" method="post">
+                        <form class="form-signin" action="/lifter/{{ item.id }}/update" method="post">
                           <fieldset>
                             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                            <input type="hidden" name="isRemoved" value="1">
+                            <input type="hidden" name="firstname" value="{{ item.firstname }}">
+                            <input type="hidden" name="lastname" value="{{ item.lastname }}">
 
                             <h4> ARE YOU SURE YOU WANT TO DELETE, {{ item.firstname }} {{ item.lastname }}? </h4>
 

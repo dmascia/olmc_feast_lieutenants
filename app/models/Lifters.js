@@ -52,6 +52,10 @@ module.exports = function(sequelize, DataTypes) {
     isRemoved: {
       type: DataTypes.INTEGER(1),
       allowNull: false
+    },
+    islifter: {
+      type: DataTypes.INTEGER(1),
+      allowNull: false
     }
   },
   {

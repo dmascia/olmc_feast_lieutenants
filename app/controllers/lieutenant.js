@@ -3,7 +3,8 @@
 const express = require('express'),
       router = express.Router(),
       db = require('./../models'),
-      crypto = require('crypto');
+      crypto = require('crypto'),
+      moment = require('moment');
 
 module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
@@ -20,7 +21,16 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           lifterCount = 0;
 
       db.Lifters.findAndCountAll({
-        where: { UserId: req.user.id },
+        where: {
+          $and: [
+            {
+              UserId: req.user.id
+            },
+            {
+              isRemoved: 0
+            }
+          ]
+        },
         order: 'lastname ASC'
       })
       .then( liftersResult => {
@@ -58,7 +68,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
                 zip: lifter.dataValues.zip,
                 tshirt_size: lifter.dataValues.tshirt_size,
                 phone: lifter.dataValues.phone,
-                dob: lifter.dataValues.dob,
+                dob: moment(lifter.dataValues.dob).format('MM/DD/YYYY'),
                 UserId: lifter.dataValues.UserId,
                 status: "OUT"
               },
@@ -119,7 +129,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
               zip: lifter.dataValues.zip,
               tshirt_size: lifter.dataValues.tshirt_size,
               phone: lifter.dataValues.phone,
-              dob: lifter.dataValues.dob,
+              dob: moment(lifter.dataValues.dob).format('MM/DD/YYYY'),
               UserId: lifter.dataValues.UserId,
               status: "OUT"
             };
