@@ -39,11 +39,6 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
       })
       .then( liftersResult => {
 
-        if (liftersResult.length < 1) {
-
-          throw new Error("no lifters found");
-        }
-
         liftersData = liftersResult;
 
         let likeThisYear = "" + new Date().getFullYear() + "%";
