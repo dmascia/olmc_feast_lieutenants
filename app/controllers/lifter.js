@@ -97,8 +97,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
     (req, res) => {
 
       const lifter = req.body;
-      const lifterId = req.params.lifter;
-
+      
       db.Payments.create(lifter)
         .then( createPaymentResult => {
 
