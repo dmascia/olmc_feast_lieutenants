@@ -41,9 +41,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
         liftersData = liftersResult;
 
-        let likeThisYear = "" + new Date().getFullYear() + "%";
-
-        return db.sequelize.query("SELECT firstname, lastname FROM Payments WHERE UserId = 8 AND createdAt LIKE '" + likeThisYear + "' ORDER BY lastname ASC;");
+        return db.Payements.findThisYearsPayments();
       })
       .then( paymentsResult => {
 

@@ -38,5 +38,17 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'Payments'
   });
 
+  Payments.findThisYearsPaymentsByLT = userID => {
+    let likeThisYear = "" + new Date().getFullYear() + "%";
+
+    return sequelize.query("SELECT firstname, lastname FROM Payments WHERE UserId = " + userID + " AND createdAt LIKE '" + likeThisYear + "' ORDER BY lastname ASC;");
+  };
+
+  Payments.findThisYearsPayments = () => {
+    let likeThisYear = "" + new Date().getFullYear() + "%";
+
+    return sequelize.query("SELECT firstname, lastname FROM Payments WHERE createdAt LIKE '" + likeThisYear + "' ORDER BY lastname ASC;");
+  };
+
   return Payments;
 };
