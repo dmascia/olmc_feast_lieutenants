@@ -159,6 +159,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
           lieutenant: `${req.user.firstname} ${req.user.lastname}`,
           lieutenantId: req.user.id,
           lifterCount: 0,
+          csrfToken: req.csrfToken(),
           error: "no lifters found!"
         });
       });
