@@ -40,10 +40,9 @@ module.exports = (app, config) => {
   app.use(methodOverride());
   app.use(session({
     secret: 'zriRHn1GY1pAREBIZHFS',
-    cookie: { maxAge: 60000 },
-    store:  new session.MemoryStore,
-    saveUninitialized: true,
-    resave: 'true',
+    cookie: { maxAge: 120000 },
+    saveUninitialized: false,
+    resave: false,
   }));
   app.use(flash());
   app.use(passport.initialize());

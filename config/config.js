@@ -15,10 +15,10 @@ const config = {
     db: 'mysql://root:root@localhost:8889/olmcfeast',
     paypal: {
       env: "sandbox",
-      clientId: null
+      clientId: "AWpcWnSknfcPAnkpel5M8kqGJp5gCJQbGH-CkOYF5Qy78FBTfNQhb8CN9z95U4wqHKur-o0QrBQB7P3B"
     },
     transporter: {
-      key: null
+      key: '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'
     }
   }
 };

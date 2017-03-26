@@ -26,7 +26,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
       })
       .then( findAndCountResult => {
 
-        const lieutenantCount = findAndCountResult.count;
+        lieutenantCount = findAndCountResult.count;
 
         if (lieutenantCount < 1) {
 
