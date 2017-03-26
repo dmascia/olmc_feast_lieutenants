@@ -41,7 +41,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
         liftersData = liftersResult;
 
-        return db.Payements.findThisYearsPayments();
+        return db.Payments.findThisYearsPayments();
       })
       .then( paymentsResult => {
 
