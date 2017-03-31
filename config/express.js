@@ -14,7 +14,9 @@ const express = require('express'),
       isAuthorized = require('./../app/middleware/isAuthorized'),
       csrf = require('csurf'),
       flash = require('connect-flash'),
-      ensureLogin = require('connect-ensure-login');
+      ensureLogin = require('connect-ensure-login'),
+      SequelizeStore = require('connect-session-sequelize')(session.Store),
+      db = require('./../app/models/index');
 
 module.exports = (app, config) => {
 
@@ -43,6 +45,9 @@ module.exports = (app, config) => {
     cookie: { maxAge: 120000 },
     saveUninitialized: false,
     resave: false,
+    store: new SequelizeStore({
+      db: db.sequelize
+    })
   }));
   app.use(flash());
   app.use(passport.initialize());
