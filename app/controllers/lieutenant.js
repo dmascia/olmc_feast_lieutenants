@@ -51,7 +51,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
             lifterInCount = 0,
             lifterNotFoundInPayments = [];
 
-        if (paymentsResult[0].length > 1) {
+        if (paymentsResult[0].length >= 1) {
 
           liftersData = lifterResult.map( lifter => {
 

@@ -16,7 +16,8 @@ const express = require('express'),
       flash = require('connect-flash'),
       ensureLogin = require('connect-ensure-login'),
       SequelizeStore = require('connect-session-sequelize')(session.Store),
-      db = require('./../app/models/index');
+      db = require('./../app/models/index'),
+      cookieSession = require('cookie-session');
 
 module.exports = (app, config) => {
 
@@ -40,9 +41,14 @@ module.exports = (app, config) => {
   app.use(compress());
   app.use(express.static(`${config.root}/public`));
   app.use(methodOverride());
+  app.use(cookieSession({
+    name: 'olmc',
+    keys: ['key1', 'key2'],
+    maxAge: 24 * 60 * 60 * 1000
+  }));
   app.use(session({
     secret: 'zriRHn1GY1pAREBIZHFS',
-    cookie: { maxAge: 120000 },
+    cookie: { httpOnly: true, secure: true },
     saveUninitialized: false,
     resave: false,
     store: new SequelizeStore({
@@ -52,7 +58,7 @@ module.exports = (app, config) => {
   app.use(flash());
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(csrf({ cookie: true }));
+  app.use(csrf());
 
   const controllers = glob.sync(`${config.root}//app/controllers/*.js`);
 

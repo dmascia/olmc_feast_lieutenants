@@ -50,7 +50,7 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
             grandTotalIn = 0,
             lifterMarkedDelete = [];
 
-        if (paymentsResult[0].length > 1) {
+        if (paymentsResult[0].length >= 1) {
           data = lieutenantData.map( user => {
 
             let lifterCount = 0,
@@ -83,7 +83,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
                 if (
                   payment.firstname.toLowerCase().trim() === lifter.dataValues.firstname.toLowerCase().trim() &&
-                  payment.lastname.toLowerCase().trim() === lifter.dataValues.lastname.toLowerCase().trim()
+                  payment.lastname.toLowerCase().trim() === lifter.dataValues.lastname.toLowerCase().trim() &&
+                  user.dataValues.id === lifter.dataValues.UserId
                 ) {
 
                   lifterInCount++;
