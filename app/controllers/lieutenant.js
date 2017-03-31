@@ -76,8 +76,8 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
             paymentsResult[0].forEach( payment => {
 
               if (
-                payment.firstname.toLowerCase() === lifter.dataValues.firstname.toLowerCase() &&
-                payment.lastname.toLowerCase() === lifter.dataValues.lastname.toLowerCase()
+                payment.firstname.toLowerCase().trim() === lifter.dataValues.firstname.toLowerCase().trim() &&
+                payment.lastname.toLowerCase().trim() === lifter.dataValues.lastname.toLowerCase().trim()
               ) {
 
                 lifterInCount++;
