@@ -50,5 +50,17 @@ module.exports = function(sequelize, DataTypes) {
     return sequelize.query("SELECT firstname, lastname FROM Payments WHERE createdAt LIKE '" + likeThisYear + "' ORDER BY lastname ASC;");
   };
 
+  Payments.getPaidReport = () => {
+    return sequelize.query(`SELECT 
+          concat(u.firstname, ' ',  u.lastname) as LT, 
+          concat(p.firstname, ' ',  p.lastname) as lifter, 
+          p.intent as paymentMethod,
+          p.paymentID,
+          p.createdAt as payDate
+        FROM Payments p
+        JOIN Users u ON p.UserId = u.id 
+        WHERE p.createdAt like '${new Date().getFullYear()}%'`);
+  }
+
   return Payments;
 };

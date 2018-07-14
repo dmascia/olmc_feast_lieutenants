@@ -17,6 +17,7 @@ const express = require('express'),
       ensureLogin = require('connect-ensure-login'),
       SequelizeStore = require('connect-session-sequelize')(session.Store),
       db = require('./../app/models/index'),
+      json2csv = require('express-json2csv'),
       cookieSession = require('cookie-session');
 
 module.exports = (app, config) => {
@@ -59,6 +60,7 @@ module.exports = (app, config) => {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(csrf());
+  app.use(json2csv);
 
   const controllers = glob.sync(`${config.root}//app/controllers/*.js`);
 

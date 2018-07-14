@@ -8,6 +8,38 @@ module.exports = (app, passport, ensureLogin, isAuthorized) => {
 
   app.use('/admin', router);
 
+  router.get('/reports/payment',
+    ensureLogin.ensureLoggedIn('/'),
+    isAuthorized('ADMIN'),
+    (req, res) => {
+      return db.Payments.getPaidReport()
+        .then(report => {
+          if (report[0].length) {
+            const col = [{
+              prop: 'LT',
+              label: 'Lieutenant'
+            }, {
+              prop: 'lifter',
+              label: 'Lifter'
+            },
+            {
+              prop: 'paymentMethod',
+              label: 'Payment Method'
+            },
+            {
+              prop: 'paymentID',
+              label: 'PayPal Invoice ID'
+            }
+            ,{
+              prop: 'payDate',
+              label: 'Payment Date'
+            }];
+
+            return res.csv(`paymentReport-${new Date().getFullYear()}`, report[0], col);
+          }
+        })
+    });
+
   router.get('/',
     ensureLogin.ensureLoggedIn('/'),
     isAuthorized('ADMIN'),

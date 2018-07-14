@@ -252,6 +252,10 @@
             </div>
           </div>
         </div>
+
+        <h3>Reports</h3>
+
+        <a href='/admin/reports/payment'>Payment Report</a>
     </div>
   </div>
 
